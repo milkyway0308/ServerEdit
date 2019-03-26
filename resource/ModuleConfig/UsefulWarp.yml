@@ -1,0 +1,68 @@
+# UsefulWarp Configuration
+# UsefulWarp is submodule of ServerEdit.
+# If you don't want to use this file, make your own configuration file.
+# Plugin do not read file name, but only configuration.
+# Too many module can cause server stop.
+Announcement:
+  Warp:
+    Option:
+      - 'require listen PlayerWarpDelayEvent'
+      - 'set @temp to leftDelay'
+      - 'set @delay2 to eval|{temp:delay}%60'
+      - '{temp:delay} equals 0'
+    Message:
+      - '&aUsefulWarp &9| &7Warp will execute in <leftTime> second.'
+  WarpDeny:
+    Option:
+      - 'require playerEvent:WarpPermissionDeniedEvent'
+    Message:
+      - '&aUsefulWarp &9| &cPermission denied.'
+  WarpSuccess:
+    Option:
+      - 'require playerEvent:WarpSuccessEvent'
+    Message:
+      - '&aUsefulWarp &9| &aSuccessfully warped to Warp &b<WarpName>&a.'
+  NoWarpExist:
+    Option:
+      - 'require playerEvent:NoWarpExistEvent'
+    Message:
+      - '&aUsefulWarp &9| &cNo warp exists with this name.'
+  WarpBlacklistedEvent:
+    Option:
+      - 'require playerEvent:WarpBlacklistedEvent'
+    Message:
+      - '&aUsefulWarp &9| &cCannot warp to blacklisted warp.'
+Module:
+  WarpCommand-UserWarp:
+    Module type: 'Warp:WarpCommand'
+    Module config:
+      Command: '/warp'
+      Permission: 'warp.user'
+      Teleport duration: '30s'
+      Teleport cooldown: '120s'
+      Cancel teleport when move: true
+      Apply cooldown at fail: true
+      Apply cooldown at success: true
+      Use blacklisted message: false
+      Teleport list type: 'Whitelist'
+      Teleport whitelist:
+        - 'spawn'
+        - 'shop'
+  WarpCommand-ModeratorWarp:
+    Module type: 'Warp:WarpCommand'
+    Module config:
+      Command: '/mwarp'
+      Permission: 'warp.moderator'
+      Teleport duration: '0s'
+      Teleport cooldown: '0s'
+      Use blacklisted message: true
+      Teleport list type: 'Blacklist'
+      Teleport blacklist:
+        - 'admin:*'
+  WarpCommand-AdminWarp:
+    Module type: 'Warp:WarpCommand'
+    Module config:
+      Command: '/awarp'
+      Permission: 'warp.admin'
+      Teleport duration: '0s'
+      Teleport cooldown: '0s'

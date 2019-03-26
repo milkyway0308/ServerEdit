@@ -1,0 +1,5 @@
+# SweetHome Configuration
+# SweetHome is submodule version of ServerEdit.
+# If you don't want to use this file, make your own configuration file.
+# Plugin do not read file name, but only configuration.
+# Too many module can cause server stop.

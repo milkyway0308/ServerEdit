@@ -1,0 +1,5 @@
+name: ServerEdit
+main: skywolf46.ServerEdit.ServerEdit
+version: 1.0
+softdepend:
+  - CommandAnnotation
