@@ -1,0 +1,6 @@
+script:construct
+    load "test" at "Example.cscript" to command "/test"
+script:destruct
+    unload command "/test"
+script:test
+    whisper "test" to {$player}

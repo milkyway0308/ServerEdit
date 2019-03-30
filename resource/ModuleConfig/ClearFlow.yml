@@ -2,7 +2,7 @@
 # ClearFlow is ClearLag submodule version of ServerEdit.
 # If you don't want to use this file, make your own configuration file.
 # Plugin do not read file name, but only configuration.
-# Too many module can cause server stop.
+# Too many module can cause server stopCurrent.
 Announcement:
   Announce-4min:
     # (Time) connector <Event>
@@ -10,7 +10,7 @@ Announcement:
 
     Option:
       - '4:00 equals LeftEventDelay|ClearItem'
-      - 'Broadcast in world'
+      - 'BroadcastInvoker in world'
     Message:
       - '&9ClearFlow &6| &7Dropped item will clear in &44 minute&7'
   Announce-1min:
@@ -20,7 +20,7 @@ Announcement:
       - '0:15 equals LeftEventDelay|ClearItem'
       - '0:10 equals LeftEventDelay|ClearItem'
       - '0:10 before LeftEventDelay|ClearItem'
-      - 'Broadcast in world'
+      - 'BroadcastInvoker in world'
     Message:
       - '&9ClearFlow &6| &7Dropped item will clear in &4<leftTime> seconds&7!'
 Module:

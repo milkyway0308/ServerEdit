@@ -149,6 +149,10 @@ public class CompileStatus {
         this.attributes = at;
     }
 
+    public String[] getOriginal(){
+        return Arrays.copyOf(strings,strings.length);
+    }
+
     public String getOriginal(int i){
         return original[i];
     }

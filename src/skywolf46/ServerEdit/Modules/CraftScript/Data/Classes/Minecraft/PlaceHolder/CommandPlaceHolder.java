@@ -1,21 +1,22 @@
-package skywolf46.ServerEdit.Modules.CraftScript.Data.Classes.Condition;
+package skywolf46.ServerEdit.Modules.CraftScript.Data.Classes.Minecraft.PlaceHolder;
 
-import skywolf46.ServerEdit.Modules.CraftScript.Data.Classes.Condition.Extension.AbstractConditionHelper;
+import skywolf46.ServerEdit.Modules.CraftScript.Data.Annotation.Description;
 import skywolf46.ServerEdit.Modules.CraftScript.Data.Classes.Native.VoidOverInfinityClass;
 import skywolf46.ServerEdit.Modules.CraftScript.Data.CompileStatus;
-import skywolf46.ServerEdit.Modules.CraftScript.Extension.CraftScriptClass;
 import skywolf46.ServerEdit.Modules.CraftScript.Data.ExecuteState;
+import skywolf46.ServerEdit.Modules.CraftScript.Extension.CraftScriptClass;
 import skywolf46.ServerEdit.Modules.CraftScript.Util.TripleFunction;
 
-public class ThenConditionHelper extends AbstractConditionHelper {
+public class CommandPlaceHolder extends MinecraftPlaceHolder{
+    public static final CommandPlaceHolder STATIC = new CommandPlaceHolder();
     @Override
     public String getClassName() {
-        return "ThenCondition";
+        return "Command";
     }
 
     @Override
     public void applyData(CompileStatus cl, int currentIndex) {
-        // What do i thinking
+
     }
 
     @Override
@@ -25,11 +26,15 @@ public class ThenConditionHelper extends AbstractConditionHelper {
 
     @Override
     public TripleFunction<String, Integer, CompileStatus, CraftScriptClass> getClassParser() {
-        return (str,index,status) -> {
-            if(str.equals("then"))
-                return new ThenConditionHelper();
+        return (s,i,c) ->{
+            if(s.equalsIgnoreCase("command"))
+                return STATIC;
             return null;
         };
     }
 
+    @Override
+    public int processPriority() {
+        return 0;
+    }
 }

@@ -23,4 +23,12 @@ public abstract class AbstractConditionHelper extends IgnoredCraftScriptClass {
     public String getClassPath() {
         return "native.condition.ignored";
     }
+
+    @Override
+    public void onIgnore(CraftScriptClass[] parsed, int index) {
+        if (index == 0)
+            throw new IllegalStateException("[CraftScript|Compile Error] Condition Helper cannot locate in index 0");
+        if (parsed.length - 1 <= index)
+            throw new IllegalStateException("[CraftScript|Compile Error] Condition Helper need 1 or more parameter");
+    }
 }

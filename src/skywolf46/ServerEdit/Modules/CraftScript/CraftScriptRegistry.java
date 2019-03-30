@@ -1,14 +1,20 @@
 package skywolf46.ServerEdit.Modules.CraftScript;
 
 import skywolf46.ServerEdit.Modules.CraftScript.Data.AfterProcessor.CastingProcessor;
+import skywolf46.ServerEdit.Modules.CraftScript.Data.Classes.AtConditionHelper;
 import skywolf46.ServerEdit.Modules.CraftScript.Data.Classes.Condition.MIDI.MIDILoadFile;
 import skywolf46.ServerEdit.Modules.CraftScript.Data.Classes.Condition.MIDI.MIDIPlayFile;
 import skywolf46.ServerEdit.Modules.CraftScript.Data.Classes.Condition.MIDI.MIDISequencer;
 import skywolf46.ServerEdit.Modules.CraftScript.Data.Classes.Condition.MIDI.MIDIVolume;
 import skywolf46.ServerEdit.Modules.CraftScript.Data.Classes.Interface.CastableScriptClass;
 import skywolf46.ServerEdit.Modules.CraftScript.Data.Classes.Invokers.ConsolePrintInvoker;
+import skywolf46.ServerEdit.Modules.CraftScript.Data.Classes.Invokers.DebuggingInvoker;
 import skywolf46.ServerEdit.Modules.CraftScript.Data.Classes.Invokers.SetVariableInvoker;
 import skywolf46.ServerEdit.Modules.CraftScript.Data.Classes.Invokers.WaitScriptInvoker;
+import skywolf46.ServerEdit.Modules.CraftScript.Data.Classes.Minecraft.Invoker.BroadcastInvoker;
+import skywolf46.ServerEdit.Modules.CraftScript.Data.Classes.Minecraft.Invoker.LoadScriptCommandInvoker;
+import skywolf46.ServerEdit.Modules.CraftScript.Data.Classes.Minecraft.Invoker.SendMessageInvoker;
+import skywolf46.ServerEdit.Modules.CraftScript.Data.Classes.Minecraft.PlaceHolder.CommandPlaceHolder;
 import skywolf46.ServerEdit.Modules.CraftScript.Data.Classes.Native.DoubleClass;
 import skywolf46.ServerEdit.Modules.CraftScript.Data.Classes.Native.FloatClass;
 import skywolf46.ServerEdit.Modules.CraftScript.Data.Classes.Native.IntegerClass;
@@ -26,6 +32,10 @@ import skywolf46.ServerEdit.Modules.CraftScript.Data.Classes.RelativeTimeClass;
 import skywolf46.ServerEdit.Modules.CraftScript.Extension.PatternMatchingClass;
 
 import java.util.*;
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 public class CraftScriptRegistry {
     private static List<CraftScriptClass> patternScripts = new ArrayList<>();
@@ -56,7 +66,18 @@ public class CraftScriptRegistry {
 
     private static Random r = new Random();
 
-    public static CraftScriptClass parseString(String s) {
+    public static void parseAndDebug(String toParse, Consumer<CompileStatus> debug){
+        parseString(toParse,(c,l) -> {
+            debug.accept(c);
+            return new DefaultORCondition(c,l);
+        });
+    }
+
+    public static CraftScriptClass parseString(String s){
+        return parseString(s, DefaultORCondition::new);
+    }
+
+    private static CraftScriptClass parseString(String s, BiFunction<CompileStatus,Long,CraftScriptClass> finalizer) {
         String[] split = s.split(" ");
         CraftScriptClass[] cls = new CraftScriptClass[split.length];
         long access = System.currentTimeMillis() * (r.nextInt(392));
@@ -99,7 +120,7 @@ public class CraftScriptRegistry {
 
         for (int i = 0; i < st.length(); i++)
             st.get(i).applyData(st, i);
-        return new DefaultORCondition(st,access);
+        return finalizer.apply(st,access);
     }
 
     private static CraftScriptClass parse(CompileStatus st, String s, int index) {
@@ -120,13 +141,15 @@ public class CraftScriptRegistry {
     }
 
 
+
+
     public static void init() {
         if (isInitialized)
             throw new IllegalStateException("Already initialized");
         register(new AfterCondition(get("after")));
         register(new BeforeCondition(get("before")));
         register(new ForceRequireCondition(get("require")));
-        register(new EqualsCondition(get("equal", "equals","is")));
+        register(new EqualsCondition(get("equal", "equals")));
         register(new RealTimeClass(Calendar.getInstance()));
         register(new RelativeTimeClass(1, 1, 1, 1, 1));
         register(new ThenConditionHelper());
@@ -150,8 +173,19 @@ public class CraftScriptRegistry {
         register(new MIDIVolume());
         register(new CastingProcessor());
         register(new SetVariableInvoker(null,null));
-
+        register(new ISTypeComparator());
+        register(new AtConditionHelper());
+        register(new DebuggingInvoker(null));
+        register(new ToVariableConnectCondition());
         CastableScriptClass.registerGlobalCaster("type",(fromto,sc) -> new TypeOfVariable(sc));
+    }
+
+    public static void initMinecraft(){
+        init();
+        register(new CommandPlaceHolder());
+        register(new BroadcastInvoker());
+        register(new SendMessageInvoker());
+        register(new LoadScriptCommandInvoker());
     }
 
     private static String[] get(String... str) {

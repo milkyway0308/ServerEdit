@@ -6,6 +6,7 @@ import skywolf46.ServerEdit.Modules.CraftScript.Data.CompileStatus;
 import skywolf46.ServerEdit.Modules.CraftScript.Data.ExecuteState;
 import skywolf46.ServerEdit.Modules.CraftScript.Exceptions.IllegalParameterException;
 import skywolf46.ServerEdit.Modules.CraftScript.Extension.CraftScriptClass;
+import skywolf46.ServerEdit.Modules.CraftScript.Util.ScriptUtil;
 import skywolf46.ServerEdit.Modules.CraftScript.Util.TripleFunction;
 
 import javax.sound.midi.InvalidMidiDataException;
@@ -62,6 +63,8 @@ public class MIDILoadFile extends CraftScriptClass {
     public TripleFunction<String, Integer, CompileStatus, CraftScriptClass> getClassParser() {
         return (s, i, c) -> {
             if(!s.equals("load"))
+                return null;
+            if(!ScriptUtil.isInstanceOf(c.get(0),MIDISequencer.class))
                 return null;
             if (i != 1)
                 throw new IllegalParameterException();

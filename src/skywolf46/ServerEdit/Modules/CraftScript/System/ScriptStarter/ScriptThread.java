@@ -1,26 +1,33 @@
 package skywolf46.ServerEdit.Modules.CraftScript.System.ScriptStarter;
 
+import skywolf46.ServerEdit.Modules.CraftScript.Data.ExecuteState;
 import skywolf46.ServerEdit.Modules.CraftScript.Data.ScriptState;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class ScriptThread extends Thread{
+public class ScriptThread extends Thread {
     private ScriptState script;
-    public static AtomicBoolean stopThread = new AtomicBoolean();
+    private ExecuteState state;
+    private ScriptThreadManager stm;
     private int number;
-    public ScriptThread(int i){
+
+    public ScriptThread(ScriptThreadManager currentManager, int i) {
         this.number = i;
+        stm = currentManager;
         start();
     }
 
     @Override
     public void run() {
-        while (!stopThread.get()){
-            if(script != null){
-
-                script.executeScript(this);
+        while (!stm.isStopped()) {
+            if (script != null) {
+                if (state == null)
+                    script.executeScript(this);
+                else
+                    script.executeScript(this,state);
                 script = null;
-                ScriptThreadManager.addThread(this);
+                state = null;
+                stm.addThread(this);
             }
         }
     }
@@ -29,7 +36,12 @@ public class ScriptThread extends Thread{
         this.script = st;
     }
 
-    public int getThreadNumber(){
+    public void supply(ScriptState st, ExecuteState state) {
+        this.script = st;
+        this.state = state;
+    }
+
+    public int getThreadNumber() {
         return number;
     }
 }

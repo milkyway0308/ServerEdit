@@ -85,4 +85,9 @@ public class ExecuteState {
         if (!modified)
             currentIndex++;
     }
+
+    public void collapse(ExecuteState state,ScriptThread th) {
+        map.putAll(state.map);
+        this.manage = th;
+    }
 }

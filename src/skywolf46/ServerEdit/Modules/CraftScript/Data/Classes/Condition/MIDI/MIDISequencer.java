@@ -37,7 +37,7 @@ public class MIDISequencer extends CraftScriptClass {
 
     @Override
     public String getClassName() {
-        return "MIDISequencer";
+        return "Sequencer";
     }
 
     @Override

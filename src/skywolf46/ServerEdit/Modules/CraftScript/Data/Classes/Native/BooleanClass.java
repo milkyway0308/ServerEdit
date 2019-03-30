@@ -6,12 +6,21 @@ import skywolf46.ServerEdit.Modules.CraftScript.Util.TripleFunction;
 
 public class BooleanClass extends NativeScriptClass{
     private boolean val;
+    public static final BooleanClass TRUE = new BooleanClass(true);
+    public static final BooleanClass FALSE = new BooleanClass(false);
     public BooleanClass(boolean val){
         this.val = val;
     }
+
+    public static CraftScriptClass valueOf(boolean b) {
+        if(b)
+            return TRUE;
+        return FALSE;
+    }
+
     @Override
     public String getClassName() {
-        return "Boolaen";
+        return "Boolean";
     }
 
     @Override
@@ -32,5 +41,10 @@ public class BooleanClass extends NativeScriptClass{
     @Override
     public boolean equals(Object obj) {
         return obj instanceof BooleanClass && this.val == ((BooleanClass) obj).val;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + "[" + val + "]";
     }
 }

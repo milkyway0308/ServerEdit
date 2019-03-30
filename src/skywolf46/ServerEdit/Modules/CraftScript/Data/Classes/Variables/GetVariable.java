@@ -52,7 +52,8 @@ public class GetVariable extends CraftScriptClass {
         return (i, c, e) -> {
             if(!temp)
                 c.set(i,VariableStorage.GLOBAL.get(toGet));
-
+            else
+                c.set(i,e.getStateObject(toGet) == null ? VoidOverInfinityClass.STATIC : e.getStateObject(toGet));
             return i + 1;
         };
     }

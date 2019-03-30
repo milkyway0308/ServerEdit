@@ -14,45 +14,47 @@ import java.util.List;
 public class Test {
     public static void main(String[] args) {
         CraftScriptRegistry.init();
-        long current = System.currentTimeMillis();
-        System.out.println("Starting parse...");
-        String[] script = new String[]{
-                "print 'hello world'",
-                "print 'program to work and not to feel'",
-                "print 'not even altough light...'",
-                "print 'hello world'",
-        };
-        List<String> keyword = new ArrayList<>(Arrays.asList(script));
-        ScriptState sm = new ScriptState(Arrays.asList(script));
-
-
-        System.out.println("Warming up...");
-        for(int i = 0;i < 1000;i++)
-            sm= new ScriptState(keyword);
-        System.out.println("Parsing...");
-        for(int i = 0;i < 100000;i++)
-            sm= new ScriptState(keyword);
-        System.out.println("Parsing time: " + (System.currentTimeMillis() - current) + "ms");
-        System.out.println("Processing....");
-//        System.out.println("Processing result = " + csc.process(new ExecuteState()));
-        System.out.println("Complete.");
-
+        CraftScriptRegistry.initMinecraft();
 //        long current = System.currentTimeMillis();
-//        String[] script = {
-//                "set 'test' to 'hello world4'",
-//                "if {test} is 'hello world'",
-//                "print 'Woah, Variable test is hello world!'",
-//                "endif"
+//        System.out.println("Starting parse...");
+//        String[] script = new String[]{
+//                "print 'hello world'",
+//                "print 'program to work and not to feel'",
+//                "print 'not even altough light...'",
+//                "print 'hello world'",
 //        };
-//
-//        script = new String[]{
-//            "set 'midi' to sequencer",
-//                "{midi} load 'T:\\Coward Montblanc.mid'",
-//                "{midi} play"
-//        };
+//        List<String> keyword = new ArrayList<>(Arrays.asList(script));
 //        ScriptState sm = new ScriptState(Arrays.asList(script));
-//        sm.queueScript();
+//
+//
+//        System.out.println("Warming up...");
+//        for(int i = 0;i < 1000;i++)
+//            sm= new ScriptState(keyword);
+//        System.out.println("Parsing...");
+//        for(int i = 0;i < 1000000;i++)
+//            sm= new ScriptState(keyword);
+//        System.out.println("Parsing time: " + (System.currentTimeMillis() - current) + "ms");
+//        System.out.println("Processing....");
+//        System.out.println("Processing result = " + csc.process(new ExecuteState()));
+//        System.out.println("Complete.");
 
+        long current = System.currentTimeMillis();
+        String[] script = {
+                "set 'test' to 'hello world4'",
+                "if {test} is 'hello world'",
+                "print 'Woah, Variable test is hello world!'",
+                "endif"
+        };
+
+        script = new String[]{
+                "load 'test' at 'Example.yml' to command '/test'"
+        };
+
+
+        ScriptState sm = new ScriptState(Arrays.asList(script));
+//        sm.queueScript();
+//        CraftScriptClass csc = CraftScriptRegistry.parseString("require sequencer is Sequencer");
+//        System.out.println(csc.processScript(new ExecuteState()));
 //        CraftScriptClass csc = CraftScriptRegistry.parseString("pause 10 second");
 //        csc.processScript(new ExecuteState());
 //        ExecuteState state = new ExecuteState();
